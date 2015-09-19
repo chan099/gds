@@ -1,0 +1,33 @@
+#!/bin/bash
+# chkconfig: - 95 10
+# description: Hello World webapp
+# processname: helloworld.py
+# pidfile: /var/run/helloworld.pid
+pidfile="/var/run/helloworld.pid"
+startcommand="python2.7 /opt/helloworld/bin/helloworld.py > /opt/helloworld/log/helloworld.stdout.log 2>&1 &"
+
+PATH="/usr/bin:${PATH}"
+
+case "$1" in
+  start)
+        echo -n "Starting helloworld: "
+        daemon --user webapp --pidfile=$pidfile $startcommand
+        echo
+        touch $pidfile
+        ;;
+  stop)
+        echo -n "Shutting down helloworld: "
+	pkill -f helloworld.py && echo_success || echo_failure
+        echo
+        rm -f $pidfile
+        ;;
+  restart)
+        $0 stop
+        $0 start
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0
