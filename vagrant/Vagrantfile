@@ -8,6 +8,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "chef_zero" do |chef|
     chef.cookbooks_path = "../cookbooks"
     chef.add_recipe "nginx"
+    chef.add_recipe "sudo"
   end
 
   config.vm.provision :shell, path: "test_nginx.sh"
