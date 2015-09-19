@@ -15,15 +15,27 @@
 * Add vagrant box:
 `vagrant box add https://vagrantcloud.com/puppetlabs/boxes/ubuntu-14.04-64-nocm`
 * Chose virtualbox when prompted
-* Create vagrant dir and Vagrantfile with specified box (commit 240586cab72536cb444fe934b1690d17d747e8ea)
-* Add Chef provisioner to Vagrantfile (commit 15b65d79cf01d0ca4dd1f67c35631b42b4ec34bb)
+* Create vagrant dir and Vagrantfile with specified box
+* Add Chef provisioner to Vagrantfile
 
 ## Nginx install and test
 Note: I would evaluate and possibly use the supermarket cookbook for Nginx in the real world, but just sticking with a basic hand written one for this exercise.
 
 * Create dir structure for nginx cookbook (./cookbooks/nginx)
+* Create metadata file (./cookbooks/nginx/metadata.rb)
 * Create default recipe for nginx cookbook (./cookbooks/nginx/recipes/default.rb)
-* Create package recipe with package resource (./cookbooks/nginx/recipes/package.rb) and include this in the default recipe (commit c09ba194fe7a29d0784c2120a4a46c60b768758f)
-* Ensure nginx is running with service resource in service recipe (commit 4aa231dc96ea4eaf2515f528b1711e61d4551099)
+* Create package recipe with package resource (./cookbooks/nginx/recipes/package.rb) and include this in the default recipe
+* Ensure nginx is running with service resource in service recipe
 * Add test_nginx.sh script to test Nginx is running on localhost:80
-* Add a provision block to the Vagrantfile to run test_nginx.sh (commit 693c0fc33532f1890729d7a5fb039d64f01e2e4d)
+* Add a provision block to the Vagrantfile to run test_nginx.sh
+
+## Sudo
+* Create dir structure for sudo cookbook (./cookbooks/sudo/{recipes,files/default,templates/default)
+* Create metadata file (./cookbooks/sudo/metadata.rb)
+* Create recipes:
+ * default: Includes other recipes
+ * sudoers: Uses a file resource to manage the sudoers file
+ * dir: Uses a directory resource to manage the /etc/sudoers.d dir
+ * vagrant: Uses a template resource to manage the vagrant file in /etc/sudoers.d which gives the 'vagrant' user sudo all with no password privileges
+ * admins: Uses a template resource to manage the vagrant file in /etc/sudoers.d which gives users in the 'admins' group sudo all; they will be prompted for a password
+* Add sudo recipe to the Vagrantfile
