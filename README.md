@@ -10,6 +10,9 @@
 * Extend the Vagrantfile to deploy this webapp to two additional vagrant machines and then configure the nginx to load balance between them.
 * Test (in an automated fashion) that both app servers are working, and that the nginx is serving the content correctly.
 
+## Notes
+I would evaluate and possibly use the supermarket cookbook for Nginx and sudo in the real world, but just sticking with basic hand written ones for this exercise.
+
 ## Steps
 ## Setup vagrant
 * Add vagrant box:
@@ -19,7 +22,6 @@
 * Add Chef provisioner to Vagrantfile
 
 ## Nginx install and test
-Note: I would evaluate and possibly use the supermarket cookbook for Nginx in the real world, but just sticking with a basic hand written one for this exercise.
 
 * Create dir structure for nginx cookbook (./cookbooks/nginx)
 * Create metadata file (./cookbooks/nginx/metadata.rb)
@@ -28,6 +30,8 @@ Note: I would evaluate and possibly use the supermarket cookbook for Nginx in th
 * Ensure nginx is running with service resource in service recipe
 * Add test_nginx.sh script to test Nginx is running on localhost:80
 * Add a provision block to the Vagrantfile to run test_nginx.sh
+* Add conf recipe which uses a template resource to manage nginx.conf, set to restart nginx when the file is changed
+ * Nginx will not restart if this file is not changed, preserving idempotency
 
 ## Sudo
 * Create dir structure for sudo cookbook (./cookbooks/sudo/{recipes,files/default,templates/default)
@@ -38,4 +42,10 @@ Note: I would evaluate and possibly use the supermarket cookbook for Nginx in th
  * dir: Uses a directory resource to manage the /etc/sudoers.d dir
  * vagrant: Uses a template resource to manage the vagrant file in /etc/sudoers.d which gives the 'vagrant' user sudo all with no password privileges
  * admins: Uses a template resource to manage the vagrant file in /etc/sudoers.d which gives users in the 'admins' group sudo all; they will be prompted for a password
+* Create files and templates:
+ * **Templates**
+ *  vagrant.sudoers.erb: Adds sudo config for vagrant user
+ * admins.sudoers.erb: Adds sudo config for admins group
+ * **Files**
+ * sudoers: Adds base sudoers file that includes the files in /etc/sudoers.d
 * Add sudo recipe to the Vagrantfile
