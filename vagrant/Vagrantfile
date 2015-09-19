@@ -5,12 +5,25 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "puppetlabs/ubuntu-14.04-64-nocm"
 
-  config.vm.provision "chef_zero" do |chef|
-    chef.cookbooks_path = "../cookbooks"
-    chef.add_recipe "nginx"
-    chef.add_recipe "sudo"
+  config.vm.define "proxy" do |proxy|
+    proxy.vm.network "private_network", ip: "10.1.1.11"
+    proxy.vm.network "forwarded_port", guest: 80, host: 8080
+    proxy.vm.provision "chef_zero" do |chef|
+      chef.cookbooks_path = "../cookbooks"
+      chef.add_recipe "nginx"
+      chef.add_recipe "sudo"
+    end
+    proxy.vm.provision :shell, path: "test_nginx.sh"
   end
 
-  config.vm.provision :shell, path: "test_nginx.sh"
+  ['1','2'].each do |instance|
+    config.vm.define "app#{instance}" do |app|
+      app.vm.network "private_network", ip: "10.1.1.2#{instance}"
+      app.vm.provision "chef_zero" do |chef|
+        chef.cookbooks_path = "../cookbooks"
+        chef.add_recipe "webapp"
+      end
+    end
+  end
 
 end
