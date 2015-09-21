@@ -16,7 +16,7 @@
 * I would evaluate and possibly use the supermarket cookbook for Nginx and sudo in the real world, but just sticking with basic hand written ones for this exercise.
 * The vagrant user and admins group are not created as it's not stated to do so, I would add them as part of this build.
 * The webapp runs with a horrible execute resource as root, I would not do either of those in the real world but was wasting too much time getting it daemonized as a non-priveleged user.
-* Also in the webapp cookbook is an execute statement for the Ubuntu ufw firewall config, in the real world I would have created a seperate cookbook for this with proper file management (or used a community cookbook). It also turns out it was not needed as ufw is inactive as default.
+* Also in the webapp cookbook is an execute statement for the Ubuntu ufw firewall config, in the real world I would have created a separate cookbook for this with proper file management (or used a community cookbook). It also turns out it was not needed as ufw is inactive as default.
 * For some reason the Hello World app doesn't always output Hello World but seems to always output the 200 OK header.
 
 # Instructions
@@ -39,7 +39,7 @@
 
 * Create dir structure for nginx cookbook (./cookbooks/nginx)
 * Create metadata file (./cookbooks/nginx/metadata.rb)
-* Creare recipes:
+* Create recipes:
  * default: Includes other recipes
  * service: Manages the Nginx service
  * package: Installs Nginx version specified, and keeps it at that version through the upgrade action
