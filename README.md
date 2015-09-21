@@ -77,3 +77,4 @@
 * Modify the Vagrantfile to create three machines: a proxy (running nginx) and two app servers
 * Modify the Vagrantfile to create a private network so the proxy can communicate with the app servers
 * Add port forwarding from the host port 8080 to proxy port 80 in the Vagrantfile
+* Testing: I didn't get round to do the testing. For this exercise I would use a simple shell script running as a provsion step for the proxy server that would use curl to check Nginx is serving the webapp correctly.
